@@ -4,6 +4,8 @@ import "../App.css";
 import EditPostModal from "./EditPostModal";
 import DeletePostModal from "./DeletePostModal";
 import { Heart } from "lucide-react";
+import { Bookmark } from "lucide-react";
+import { Book } from "lucide-react";
 
 export default function Post({
   post,
@@ -12,14 +14,19 @@ export default function Post({
   currentUser,
   handleLike,
   handleUnlike,
+  handleSave,
+  handleUnsave,
 }) {
   const [showOptions, setShowOptions] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
       const liked = post.likes.includes(currentUser);
       setLiked(liked);
+      const saved = post.saves.includes(currentUser);
+      setSaved(saved);
     }
   }, [post?.likes, currentUser]);
 
@@ -30,6 +37,16 @@ export default function Post({
     } else {
       setLiked(true);
       handleLike(post.id);
+    }
+  }
+
+  function savedPost() {
+    if (saved) {
+      setSaved(false);
+      handleUnsave(post.id);
+    } else {
+      setSaved(true);
+      handleSave(post.id);
     }
   }
 
@@ -57,19 +74,39 @@ export default function Post({
             <span className="time">{calcTime(post.createdAt)}</span>
           </div>
           <p className="post-content">{post.content}</p>
-          {currentUser ? (
-            <button
-              className={`like-button ${liked ? "liked-button" : ""}`}
-              onClick={likedPost}>
-              <Heart size={12} />
-              <span>{post.likes.length}</span>
-            </button>
-          ) : (
-            <button className={`like-button`} style={{ cursor: "default" }}>
-              <Heart size={12} />
-              <span>{post.likes.length}</span>
-            </button>
-          )}
+          <div className="post-reactions">
+            {currentUser ? (
+              <button
+                className={`reaction-button ${liked ? "liked-button" : ""}`}
+                onClick={likedPost}>
+                <Heart size={12} />
+                <span>{post.likes.length}</span>
+              </button>
+            ) : (
+              <button
+                className={`reaction-button`}
+                style={{ cursor: "default" }}>
+                <Heart size={12} />
+                <span>{post.likes.length}</span>
+              </button>
+            )}
+
+            {currentUser ? (
+              <button
+                className={`reaction-button ${saved ? "saved-button" : ""}`}
+                onClick={savedPost}>
+                <Bookmark size={12} />
+                <span>{post.saves.length}</span>
+              </button>
+            ) : (
+              <button
+                className={`reaction-button`}
+                style={{ cursor: "default" }}>
+                <Bookmark size={12} />
+                <span>{post.saves.length}</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {currentUser === post.username ? (

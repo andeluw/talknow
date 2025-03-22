@@ -7,6 +7,8 @@ export default function PostList({
   currentUser,
   handleLike,
   handleUnlike,
+  handleSave,
+  handleUnsave,
 }) {
   return (
     <div className="post-list">
@@ -20,6 +22,8 @@ export default function PostList({
               currentUser={currentUser}
               handleLike={handleLike}
               handleUnlike={handleUnlike}
+              handleSave={handleSave}
+              handleUnsave={handleUnsave}
             />
             {index !== posts.length - 1 && <div className="post-divider" />}
           </div>

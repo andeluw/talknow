@@ -25,7 +25,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("For You");
   const [username, setUsername] = useState(null);
 
-  const navItems = ["For You", "Your Posts"];
+  const navItems = ["For You", "Your Posts", "Saved"];
 
   function handleLogout(e) {
     e.preventDefault();
@@ -51,6 +51,7 @@ export default function Home() {
       content,
       createdAt: new Date().toISOString(),
       likes: [],
+      saves: [],
     };
 
     setPosts([newPost, ...posts]);
@@ -94,6 +95,26 @@ export default function Home() {
     setItemLocalStorage("posts", newPosts);
   }
 
+  function handleSave(id) {
+    const newPosts = posts.map((post) =>
+      post.id === id ? { ...post, saves: [...post.saves, username] } : post
+    );
+
+    setPosts(newPosts);
+    setItemLocalStorage("posts", newPosts);
+  }
+
+  function handleUnsave(id) {
+    const newPosts = posts.map((post) =>
+      post.id === id
+        ? { ...post, saves: post.saves.filter((user) => user !== username) }
+        : post
+    );
+
+    setPosts(newPosts);
+    setItemLocalStorage("posts", newPosts);
+  }
+
   if (loginPage) {
     return <LoginPage />;
   }
@@ -107,14 +128,14 @@ export default function Home() {
           {username ? (
             <button onClick={handleLogout} className="auth-button">
               Log out
-              <LogOut size={24} />
+              <LogOut size={24} className="auth-icon" />
             </button>
           ) : (
             <button
               onClick={() => setLoginPage(true)}
               className="auth-button login-button">
               Log in
-              <LogIn size={24} className="login-icon" />
+              <LogIn size={24} className="auth-icon" />
             </button>
           )}
         </div>
@@ -172,6 +193,10 @@ export default function Home() {
               handleEdit={editPost}
               handleDelete={deletePost}
               currentUser={username}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              handleSave={handleSave}
+              handleUnsave={handleUnsave}
             />
           )}
 
@@ -183,6 +208,21 @@ export default function Home() {
               currentUser={username}
               handleLike={handleLike}
               handleUnlike={handleUnlike}
+              handleSave={handleSave}
+              handleUnsave={handleUnsave}
+            />
+          )}
+
+          {activeTab === "Saved" && (
+            <PostList
+              posts={posts.filter((post) => post.saves.includes(username))}
+              handleEdit={editPost}
+              handleDelete={deletePost}
+              currentUser={username}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              handleSave={handleSave}
+              handleUnsave={handleUnsave}
             />
           )}
         </div>

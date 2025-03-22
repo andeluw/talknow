@@ -237,10 +237,6 @@
   overflow-x: hidden;
 }
 
-.post-content {
-  text-align: justify;
-}
-
 .post-moreicon-container {
   position: relative;
   display: inline-block;
@@ -261,7 +257,13 @@
   width: 80px;
 }
 
-.like-button {
+.post-reactions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.reaction-button {
   background: none;
   border: 1px solid var(--border);
   padding: 8px 12px;
@@ -276,8 +278,13 @@
 }
 
 .liked-button {
-  background: var(--copy);
-  color: var(--error);
+  background: var(--error);
+  color: var(--copy);
+}
+
+.saved-button {
+  background: var(--primary-light);
+  color: var(--primary-content);
 }
 
 .option-btn {
@@ -453,10 +460,6 @@ body:has(.modal[open]) {
     padding: 0rem;
   }
 
-  .post-options button {
-    font-size: 12px;
-  }
-
   .modal-delete {
     padding: 1rem 2rem;
   }
@@ -550,5 +553,22 @@ body:has(.modal[open]) {
 
   .modal-post {
     padding: 1rem 2rem;
+  }
+
+  .home-navitem {
+    font-size: 0.9rem;
+  }
+
+  .no-posts p {
+    font-size: 0.9rem;
+  }
+
+  .auth-button {
+    font-size: 0.9rem;
+  }
+
+  .auth-icon {
+    width: "18px";
+    height: "18px";
   }
 }
