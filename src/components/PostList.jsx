@@ -5,20 +5,33 @@ export default function PostList({
   handleEdit,
   handleDelete,
   currentUser,
+  handleLike,
+  handleUnlike,
 }) {
   return (
     <div className="post-list">
-      {posts.map((post, index) => (
-        <div key={index}>
-          <Post
-            post={post}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            currentUser={currentUser}
-          />
-          {index !== posts.length - 1 && <div className="post-divider" />}
+      {posts.length > 0 ? (
+        posts.map((post, index) => (
+          <div key={index}>
+            <Post
+              post={post}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+              currentUser={currentUser}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+            />
+            {index !== posts.length - 1 && <div className="post-divider" />}
+          </div>
+        ))
+      ) : (
+        <div className="no-posts">
+          <p>
+            No
+            {currentUser ? " posts" : " posts to display"}
+          </p>
         </div>
-      ))}
+      )}
     </div>
   );
 }

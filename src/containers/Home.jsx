@@ -50,6 +50,7 @@ export default function Home() {
       username,
       content,
       createdAt: new Date().toISOString(),
+      likes: [],
     };
 
     setPosts([newPost, ...posts]);
@@ -67,6 +68,26 @@ export default function Home() {
 
     const newPosts = posts.map((post) =>
       post.id === id ? { ...post, content: newContent } : post
+    );
+
+    setPosts(newPosts);
+    setItemLocalStorage("posts", newPosts);
+  }
+
+  function handleLike(id) {
+    const newPosts = posts.map((post) =>
+      post.id === id ? { ...post, likes: [...post.likes, username] } : post
+    );
+
+    setPosts(newPosts);
+    setItemLocalStorage("posts", newPosts);
+  }
+
+  function handleUnlike(id) {
+    const newPosts = posts.map((post) =>
+      post.id === id
+        ? { ...post, likes: post.likes.filter((user) => user !== username) }
+        : post
     );
 
     setPosts(newPosts);
@@ -160,6 +181,8 @@ export default function Home() {
               handleEdit={editPost}
               handleDelete={deletePost}
               currentUser={username}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
             />
           )}
         </div>

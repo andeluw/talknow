@@ -1,12 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EllipsisVertical } from "lucide-react";
 import "../App.css";
 import EditPostModal from "./EditPostModal";
 import DeletePostModal from "./DeletePostModal";
-import AddPostModal from "./AddPostModal";
+import { Heart } from "lucide-react";
 
-export default function Post({ post, handleEdit, handleDelete, currentUser }) {
+export default function Post({
+  post,
+  handleEdit,
+  handleDelete,
+  currentUser,
+  handleLike,
+  handleUnlike,
+}) {
   const [showOptions, setShowOptions] = useState(false);
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    if (currentUser) {
+      const liked = post.likes.includes(currentUser);
+      setLiked(liked);
+    }
+  }, [post?.likes, currentUser]);
+
+  function likedPost() {
+    if (liked) {
+      setLiked(false);
+      handleUnlike(post.id);
+    } else {
+      setLiked(true);
+      handleLike(post.id);
+    }
+  }
 
   function calcTime(timestamp) {
     const now = new Date();
@@ -32,6 +57,19 @@ export default function Post({ post, handleEdit, handleDelete, currentUser }) {
             <span className="time">{calcTime(post.createdAt)}</span>
           </div>
           <p className="post-content">{post.content}</p>
+          {currentUser ? (
+            <button
+              className={`like-button ${liked ? "liked-button" : ""}`}
+              onClick={likedPost}>
+              <Heart size={12} />
+              <span>{post.likes.length}</span>
+            </button>
+          ) : (
+            <button className={`like-button`} style={{ cursor: "default" }}>
+              <Heart size={12} />
+              <span>{post.likes.length}</span>
+            </button>
+          )}
         </div>
 
         {currentUser === post.username ? (
